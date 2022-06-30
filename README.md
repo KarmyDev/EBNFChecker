@@ -21,8 +21,8 @@ Usage: `./ebnfcheck <EBNF SOURCE> <TEST FILE>`
 Example: `./ebnfcheck ./MyFile.ebnf ./Test.txt`
 
 # How do I know if the test was succesfull?
-First at the top bottom there is a `Success: ` indicator that tells you if test went successfully.
-If it says `True` then it went alright, if it says `False` then something is wrong, Check `ErrorMsg:`
+First at the bottom there is a `Success: ` indicator that tells you if test went successfully.
+If it says `True` then it went alright, if it says `False` then something is wrong, Check `ErrorMsg:` line.
 
 Also if you notice, there should be my small pointer that shows you where the problem is. It's a nice little touch from me <3
 
