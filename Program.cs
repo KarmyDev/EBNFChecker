@@ -9,10 +9,16 @@ namespace EBNFChecker
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Usage: ebnfcheck [GRAMMAR] [WORKSPACE]\n\nParsing...\n\n");
+            Console.WriteLine("Usage: ebnfcheck [GRAMMAR] [WORKSPACE] [START SEQUENCE KEYWORD]\n\nParsing...\n\n");
+			
+			if (args.Length < 3) {
+				Console.WriteLine("\u001b[31mError: Didn't provided any [START SEQUENCE KEYWORD]\u001b[0m\n");
+				return;
+			}
+			
 			try {
 			// Find correct EbnfStyle!!! + Regroup grammar to go from top to down!!
-			var grammar = new EbnfGrammar(EbnfStyle.Iso14977).Build(File.ReadAllText(args[0]), "startSequence");
+			var grammar = new EbnfGrammar(EbnfStyle.Iso14977).Build(File.ReadAllText(args[0]), args[2]);
 			
 			var grammarMatch = grammar.Match(File.ReadAllText(args[1]));
 			if (string.IsNullOrEmpty(grammarMatch.ToString()))
