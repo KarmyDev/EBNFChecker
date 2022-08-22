@@ -108,6 +108,11 @@ namespace EBNFChecker
     				foreach (var child in m.Matches) PrintMatch(child, m.StringValue, new_indent);
 				}
 				
+				foreach (var child in grammarMatch.Matches)
+				{
+					PrintMatch(child, string.Empty);
+				}
+				
 				/*
 				void OutputChild(Eto.Parse.Match match, int indent = 0) 
 				{
@@ -118,10 +123,6 @@ namespace EBNFChecker
     			}
 				*/
 				
-				foreach (var child in grammarMatch.Matches)
-				{
-					PrintMatch(child, string.Empty);
-				}
 				
 				Console.WriteLine("\n--- END READING CHILDREN ---\n");
 				}
