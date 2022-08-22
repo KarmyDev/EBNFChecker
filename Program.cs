@@ -56,77 +56,80 @@ namespace EBNFChecker
 					if (indexNr == grammarMatch.ChildErrorIndex) 
 					{
 						printData += "\u001b[40m";
-						secondData[0] += "\u001b[41m\u001b[37;1m↑\u001b[0m";
-						secondData[1] += "\u001b[41m\u001b[37;1m|\u001b[0m";
-						secondData[2] += "\u001b[41m\u001b[37;1m[HERE]\u001b[0m";
+						secondData[0] += $"\u001b[41m\u001b[37;1m│\u001b[0m";
+						secondData[1] += $"\u001b[41m\u001b[37;1m│\u001b[0m";
+						secondData[2] += $"\u001b[41m\u001b[37;1m╰─[HERE]\u001b[0m";
 					}
 					indexNr++;
 				}
 				if (lineNr == grammarMatch.ChildErrorLine - 1)
 				{
-					Console.WriteLine(printData + "\u001b[0m");
-					Console.WriteLine($"{secondData[0]}\n{secondData[1]}\n{secondData[2]}");
+					Console.WriteLine($"\u001b[41m{grammarMatch.ChildErrorLine}\u001b[0m" + printData + "\u001b[0m");
+					Console.WriteLine($"\u001b[40m{grammarMatch.ChildErrorLine+1}\u001b[0m{secondData[0]}\n\u001b[40m{grammarMatch.ChildErrorLine+2}\u001b[0m{secondData[1]}\n\u001b[40m{grammarMatch.ChildErrorLine+3}\u001b[0m{secondData[2]}");
 					Console.WriteLine();
 				}
 					
 				lineNr++;
 			}
 			
-			Console.WriteLine("\n--- BEGIN READING CHILDREN ---\n");
-			// int intent = 0;
-			/*
-			void OutputChild(IEnumerable<Eto.Parse.Match> childs)
+			if (grammarMatch.Success)
 			{
-				intent++;
-				foreach(var child in childs)
+				Console.WriteLine("\n--- BEGIN READING CHILDREN ---\n");
+				// int intent = 0;
+				/*
+				void OutputChild(IEnumerable<Eto.Parse.Match> childs)
 				{
-					string[] forbidden = new string[] {"does", "end", "class", "load", "function", "bind", "takes", "with", "set", "to", "of", "at", "from"};
-					bool color = forbidden.Contains(child.StringValue);
-					Console.WriteLine(new String('-', intent) + $" {(color ? "\u001b[32;1m" : "")}" + child.StringValue + $" {(color ? "\u001b[0m" : "")}");
-					OutputChild(child.Matches);
+					intent++;
+					foreach(var child in childs)
+					{
+						string[] forbidden = new string[] {"does", "end", "class", "load", "function", "bind", "takes", "with", "set", "to", "of", "at", "from"};
+						bool color = forbidden.Contains(child.StringValue);
+						Console.WriteLine(new String('-', intent) + $" {(color ? "\u001b[32;1m" : "")}" + child.StringValue + $" {(color ? "\u001b[0m" : "")}");
+						OutputChild(child.Matches);
+					}
 				}
-			}
-			
-			OutputChild(grammarMatch.Matches);
-			*/
-			
-			int counter = 0;
-			
-			void PrintMatch(Eto.Parse.Match m, string p, int indent = 0) 
-			{
-    			bool isRedundent = m.StringValue == p;
-    			
-				if (!isRedundent) {
-					counter++;
-        			string indent_s = new string(' ', indent * 2);
-        			Console.WriteLine($"{indent_s} ╰── {(counter % 2 == 0 ? "\u001b[34;1m" : "")}{m.Name}{(counter % 2 == 0 ? "\u001b[0m" : "")} ── \u001b[32;1m{m.StringValue}\u001b[0m");
-   				}
-   				
-				int new_indent = indent + (isRedundent ? 0 : 1);
-    			foreach (var child in m.Matches) PrintMatch(child, m.StringValue, new_indent);
-			}
-			
-			/*
-			void OutputChild(Eto.Parse.Match match, int indent = 0) 
-			{
-       			string indent_s = new string('.', indent * 2);
-        		Console.WriteLine($"{indent_s}| {match.Name} \u001b[32;1m: {match.StringValue}\u001b[0m");
-        		foreach (var child in match.Matches) 
-				// if (match.StringValue != child.StringValue) / OutputChild(child, indent+1);
-    		}
-			*/
-			
-			foreach (var child in grammarMatch.Matches)
-			{
-				PrintMatch(child, string.Empty);
-			}
-			
-			Console.WriteLine("\n--- END READING CHILDREN ---\n");
-			
-			Console.WriteLine("\n ErrorMsg: " + grammarMatch.ErrorMessage);
-			
-			}
-			catch (Exception e) { Console.WriteLine("[[!]EXCEPTION]: " + e); }
-		}
-    }
+				
+				OutputChild(grammarMatch.Matches);
+				*/
+				
+				int counter = 0;
+				
+				void PrintMatch(Eto.Parse.Match m, string p, int indent = 0) 
+				{
+    				bool isRedundent = m.StringValue == p;
+	
+					if (!isRedundent) {
+						counter++;
+        				string indent_s = new string(' ', indent * 2);
+        				Console.WriteLine($"{indent_s} ╰── {(counter % 2 == 0 ? "\u001b[34;1m" : "")}{m.Name}{(counter % 2 == 0 ? "\u001b[0m" : "")} ── \u001b[32;1m{m.StringValue}\u001b[0m");
+   					}
+	
+					int new_indent = indent + (isRedundent ? 0 : 1);
+    				foreach (var child in m.Matches) PrintMatch(child, m.StringValue, new_indent);
+				}
+				
+				/*
+				void OutputChild(Eto.Parse.Match match, int indent = 0) 
+				{
+       				string indent_s = new string('.', indent * 2);
+        			Console.WriteLine($"{indent_s}| {match.Name} \u001b[32;1m: {match.StringValue}\u001b[0m");
+        			foreach (var child in match.Matches) 
+					// if (match.StringValue != child.StringValue) / OutputChild(child, indent+1);
+    			}
+				*/
+				
+				foreach (var child in grammarMatch.Matches)
+				{
+					PrintMatch(child, string.Empty);
+				}
+				
+				Console.WriteLine("\n--- END READING CHILDREN ---\n");
+				}
+				
+				Console.WriteLine("\n ErrorMsg: " + grammarMatch.ErrorMessage);
+				
+				}
+				catch (Exception e) { Console.WriteLine("[[!]EXCEPTION]: " + e); }
+		}	
+    }	
 }
