@@ -16,9 +16,9 @@ Everything should be in `./bin/Debug/net5.0/` folder.
 If you go to the bin folder (`cd ./bin/Debug/net5.0/`) you should get Usage and a lot of errors after you type `./ebnfcheck`, thats normal.
 It will tell you that you have to provide EBNF source, and TEST file to check if the syntax you wrote is correct.
 
-Usage: `./ebnfcheck <EBNF SOURCE> <TEST FILE>`
+Usage: `./ebnfcheck <EBNF SOURCE> <TEST FILE> <START SEQUENCE KEYWORD>`
 
-Example: `./ebnfcheck ./MyFile.ebnf ./Test.txt`
+Example: `./ebnfcheck ./MyFile.ebnf ./Test.txt startSequence`
 
 # How do I know if the test was succesfull?
 First at the bottom there is a `Success: ` indicator that tells you if test went successfully.
