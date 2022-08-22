@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Reflection.Metadata;
+using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using System;
 using Eto.Parse.Grammars;
@@ -69,6 +71,57 @@ namespace EBNFChecker
 					
 				lineNr++;
 			}
+			
+			Console.WriteLine("\n--- BEGIN READING CHILDREN ---\n");
+			// int intent = 0;
+			/*
+			void OutputChild(IEnumerable<Eto.Parse.Match> childs)
+			{
+				intent++;
+				foreach(var child in childs)
+				{
+					string[] forbidden = new string[] {"does", "end", "class", "load", "function", "bind", "takes", "with", "set", "to", "of", "at", "from"};
+					bool color = forbidden.Contains(child.StringValue);
+					Console.WriteLine(new String('-', intent) + $" {(color ? "\u001b[32;1m" : "")}" + child.StringValue + $" {(color ? "\u001b[0m" : "")}");
+					OutputChild(child.Matches);
+				}
+			}
+			
+			OutputChild(grammarMatch.Matches);
+			*/
+			
+			int counter = 0;
+			
+			void PrintMatch(Eto.Parse.Match m, string p, int indent = 0) 
+			{
+    			bool isRedundent = m.StringValue == p;
+    			
+				if (!isRedundent) {
+					counter++;
+        			string indent_s = new string(' ', indent * 2);
+        			Console.WriteLine($"{indent_s} ╰── {(counter % 2 == 0 ? "\u001b[34;1m" : "")}{m.Name}{(counter % 2 == 0 ? "\u001b[0m" : "")} ── \u001b[32;1m{m.StringValue}\u001b[0m");
+   				}
+   				
+				int new_indent = indent + (isRedundent ? 0 : 1);
+    			foreach (var child in m.Matches) PrintMatch(child, m.StringValue, new_indent);
+			}
+			
+			/*
+			void OutputChild(Eto.Parse.Match match, int indent = 0) 
+			{
+       			string indent_s = new string('.', indent * 2);
+        		Console.WriteLine($"{indent_s}| {match.Name} \u001b[32;1m: {match.StringValue}\u001b[0m");
+        		foreach (var child in match.Matches) 
+				// if (match.StringValue != child.StringValue) / OutputChild(child, indent+1);
+    		}
+			*/
+			
+			foreach (var child in grammarMatch.Matches)
+			{
+				PrintMatch(child, string.Empty);
+			}
+			
+			Console.WriteLine("\n--- END READING CHILDREN ---\n");
 			
 			Console.WriteLine("\n ErrorMsg: " + grammarMatch.ErrorMessage);
 			
